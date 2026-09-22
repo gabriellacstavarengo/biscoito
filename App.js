@@ -23,6 +23,9 @@ export default function App() {
 
   const [frase, setFrase] = useState("");
   const [aberto, setAberto] = useState(false);
+  const [favoritas, setFavoritas] = useState([]);
+
+  const fraseFavorita = favoritas.includes(frase);
 
   function abrirBiscoito() {
     const indice = Math.floor(Math.random() * frases.length);
@@ -35,6 +38,14 @@ export default function App() {
   function voltarBiscoito() {
     setFrase("");
     setAberto(false);
+  }
+
+  function alternarFavorito() {
+    setFavoritas((favoritasAtuais) =>
+      fraseFavorita
+        ? favoritasAtuais.filter((fraseAtual) => fraseAtual !== frase)
+        : [...favoritasAtuais, frase]
+    );
   }
 
   return (
@@ -63,12 +74,25 @@ export default function App() {
             <Text style={styles.frase}>"{frase}"</Text>
           </View>
 
+          <Pressable
+            style={styles.botaoFavorito}
+            onPress={alternarFavorito}
+            accessibilityRole="button"
+            accessibilityLabel={
+              fraseFavorita ? "Remover frase dos favoritos" : "Favoritar frase"
+            }
+          >
+            <Text style={styles.textoFavorito}>
+              {fraseFavorita ? "★ Favoritada" : "☆ Favoritar frase"}
+            </Text>
+          </Pressable>
+
           <Pressable style={styles.botao} onPress={voltarBiscoito}>
             <Text style={styles.textoBotao}>Voltar</Text>
           </Pressable>
 
-          <Pressable style={styles.botao} onPress={quebrarbiscoito}>
-            <Text style={styles.textoBotao}>Quebrar Biscoito</Text>
+          <Pressable style={styles.quebrarbotao} onPress={abrirBiscoito}>
+            <Text style={styles.textoquebrarbotao}>Quebrar Biscoito</Text>
           </Pressable>
         </>
       )}
@@ -100,7 +124,7 @@ const styles = StyleSheet.create({
 
   instrucao: {
     fontSize: 16,
-    color: "#7a4a16",
+    color: "#f7e6d5",
     marginBottom: 20,
   },
 
@@ -119,6 +143,18 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
 
+  botaoFavorito: {
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    marginBottom: 14,
+  },
+
+  textoFavorito: {
+    color: "#dc9f10",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
   botao: {
     backgroundColor: "#d4136d",
     paddingVertical: 14,
@@ -127,6 +163,20 @@ const styles = StyleSheet.create({
   },
 
   textoBotao: {
+    color: "#ffffff",
+    fontSize: 17,
+    fontWeight: "bold",
+  },
+
+  quebrarbotao: {
+    backgroundColor: "#d4136d",
+    paddingVertical: 14,
+    paddingHorizontal: 30,
+    borderRadius: 12,
+    marginTop: 20,
+  },
+
+  textoquebrarbotao: {
     color: "#ffffff",
     fontSize: 17,
     fontWeight: "bold",
